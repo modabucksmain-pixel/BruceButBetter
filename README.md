@@ -42,6 +42,38 @@ dual USB-C, and an added Si5351 signal-generator module. One binary covers every
 
 ---
 
+## WHAT'S DIFFERENT FROM BRUCE
+
+This is **not** a re-skin. It's a downstream fork built around one purpose-made DIY device, with extra
+modules wired in on top of upstream Bruce.
+
+### Purpose-built hardware target — `ESP-General`
+- **ESP32-S3 N16R8** (16 MB flash / 8 MB PSRAM), **1.3" SH1106 monochrome OLED** over I²C, dual USB-C.
+- Fixed module loadout on a shared SPI/I²C backbone: **CC1101 + PN532 + 2× NRF24 + Si5351 + IR + SD**.
+- UI **tuned for 128×64 mono** (status bar / padding shrunk — upstream defaults assume colour TFTs).
+- **Trimmed** for the small build: GPS, LoRa, Ethernet and FM are compiled out (`-DDISABLE_*`).
+- Upstream's commercial boards (M5Stack / Lilygo / CYD …) are **still build-able** here — see
+  [Supported Boards](#supported-boards) — but `ESP-General` is the maintained, build-verified target.
+
+### Added modules (wired into the menus, not in upstream)
+| Feature | What it does |
+|---|---|
+| **Si5351 signal generator** | Clean RF 8 kHz–160 MHz on CLK0/1/2, frequency sweep, AM band |
+| **NRF24 ESB sniffer** | Capture Enhanced-ShockBurst 2.4 GHz traffic |
+| **BLE tracker** | Track/monitor nearby BLE devices |
+| **IR replay** | Capture and re-transmit IR signals |
+| **RFID key attack** | Key-recovery attack flow on the RFID menu |
+| **Custom boot logo** | Branded splash on startup |
+
+### Packaging
+- **One-click [browser flasher](https://modabucksmain-pixel.github.io/BruceButBetter/)** (esp-web-tools) + landing site.
+- Device advertises as **`BruceButBetter`** on USB / BLE / screen.
+
+> Everything else tracks upstream [Bruce](https://github.com/pr3y/Bruce); useful changes are meant to flow
+> back upstream via PR.
+
+---
+
 ## DOWNLOAD / FLASH
 
 ### Browser flasher (recommended)
