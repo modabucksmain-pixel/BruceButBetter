@@ -267,7 +267,7 @@
 
     <div class="flash-card hud">
       <h3>READY_TO_FLASH</h3>
-      <p style="color:var(--muted); margin:0 0 22px; font-family:var(--mono); font-size:.9rem">Connect via the LEFT USB-C (UART), then run.</p>
+      <p style="color:var(--muted); margin:0 0 22px; font-family:var(--mono); font-size:.9rem">Installs the DIY <b style="color:var(--cyan)">ESP-General</b> (ESP32-S3) build. Connect via the LEFT USB-C (UART), then run.</p>
       <esp-web-install-button manifest="manifest.json">
         <button class="btn btn-primary" slot="activate">&gt; flash_device</button>
         <span slot="unsupported" class="unsupported">Web Serial unsupported — use desktop Chrome or Edge.</span>
@@ -282,6 +282,11 @@
 
       <div class="warnbox">! won't start? hold BOOT while connecting (or BOOT+RESET) to force download mode.
         install CH34x / native-USB driver. desktop Chrome or Edge required.</div>
+
+      <p style="color:var(--muted); margin:18px 0 0; font-family:var(--mono); font-size:.84rem">
+        other boards (Cardputer, CYD, Lilygo, C5, ...)? this flasher is ESP32-S3 / ESP-General only —
+        build yours from source:
+        <a href="https://github.com/modabucksmain-pixel/BruceButBetter#supported-boards">pio run -e &lt;env&gt;</a></p>
     </div>
   </div>
 </section>

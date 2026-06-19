@@ -76,6 +76,10 @@ modules wired in on top of upstream Bruce.
 
 ## DOWNLOAD / FLASH
 
+> The prebuilt binaries and the web flasher are for the **DIY ESP-General target (ESP32-S3 N16R8)**.
+> Other [supported boards](#supported-boards) (Cardputer, CYD, Lilygo, ESP32-C5 …) run different chips —
+> build those from source: `pio run -e <env>`.
+
 ### Browser flasher (recommended)
 
 **[modabucksmain-pixel.github.io/BruceButBetter](https://modabucksmain-pixel.github.io/BruceButBetter/)**
