@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bruce DIY Flipper — Web Flasher</title>
-  <meta name="description" content="ESP32-S3 N16R8 DIY Flipper Zero — Bruce firmware tarayıcı flasher" />
+  <meta name="description" content="ESP32-S3 N16R8 DIY Flipper Zero — Bruce firmware browser flasher" />
   <script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
   <style>
     :root { --bg:#0d1117; --card:#161b22; --fg:#e6edf3; --muted:#8b949e; --accent:#2ea043; --border:#30363d; }
@@ -36,38 +36,39 @@
 <body>
   <div class="wrap">
     <h1>🦈 Bruce DIY Flipper</h1>
-    <p class="sub">ESP32-S3 N16R8 — tarayıcıdan tek tıkla flash</p>
+    <p class="sub">ESP32-S3 N16R8 — flash from your browser in one click</p>
 
     <div class="card flash">
       <esp-web-install-button manifest="manifest.json">
-        <button class="btn" slot="activate">⚡ Cihaza Flash Et</button>
+        <button class="btn" slot="activate">⚡ Flash Device</button>
         <span slot="unsupported" class="unsupported">
-          Tarayıcın Web Serial desteklemiyor. Chrome veya Edge kullan (masaüstü).
+          Your browser does not support Web Serial. Use Chrome or Edge (desktop).
         </span>
         <span slot="not-allowed" class="unsupported">
-          Bu sayfa HTTPS üzerinden açılmalı.
+          This page must be served over HTTPS.
         </span>
       </esp-web-install-button>
-      <p class="note">Cihazı <b>sol USB-C</b> (UART) ile bağla, butona bas, portu seç.</p>
+      <p class="note">Connect the device via the <b>left USB-C</b> (UART), press the button, pick the port.</p>
     </div>
 
     <div class="card">
-      <h3>Nasıl?</h3>
+      <h3>How to</h3>
       <ol>
-        <li>Chrome veya Edge ile aç (masaüstü — Web Serial gerekli).</li>
-        <li>ESP32-S3'ü <b>sol USB-C</b> portundan bağla.</li>
-        <li><b>Flash Et</b> → seri portu seç → <b>Connect</b>.</li>
-        <li>"Erase device" işaretli kalsın (temiz kurulum). Install'a bas, bekle.</li>
+        <li>Open in Chrome or Edge (desktop — Web Serial required).</li>
+        <li>Connect the ESP32-S3 to the <b>left USB-C</b> port.</li>
+        <li><b>Flash Device</b> → select the serial port → <b>Connect</b>.</li>
+        <li>Keep "Erase device" checked (clean install). Hit Install and wait.</li>
       </ol>
-      <p class="browser">⚠️ Flash başlamazsa: BOOT tuşuna basılı tutarak bağla, ya da
-        boot moduna almak için BOOT+RESET. Sürücü (CH34x / native USB) kurulu olmalı.</p>
+      <p class="browser">⚠️ If flashing won't start: hold BOOT while connecting, or BOOT+RESET to enter
+        download mode. The serial driver (CH34x / native USB) must be installed.</p>
     </div>
 
     <div class="card">
-      <h3>Manuel flash (esptool)</h3>
-      <p>Tarayıcı yöntemi olmazsa, <a href="https://github.com/modabucksmain-pixel/Bruce-DIY-Flipper/releases/tag/v1.0.0">Releases</a>'ten bin indir:</p>
+      <h3>Manual flash (esptool)</h3>
+      <p>If the browser method fails, grab the bins from
+        <a href="https://github.com/modabucksmain-pixel/Bruce-DIY-Flipper/releases/tag/v1.0.0">Releases</a>:</p>
       <table>
-        <tr><th>Dosya</th><th>Offset</th></tr>
+        <tr><th>File</th><th>Offset</th></tr>
         <tr><td><code>Bruce-esp32-s3-N16R8.bin</code> (merged)</td><td><code>0x0</code></td></tr>
         <tr><td><code>bootloader.bin</code></td><td><code>0x0</code></td></tr>
         <tr><td><code>partitions.bin</code></td><td><code>0x8000</code></td></tr>
@@ -77,8 +78,8 @@
       <p style="margin-top:14px"><code>esptool.py --chip esp32s3 --port COMx write_flash 0x0 Bruce-esp32-s3-N16R8.bin</code></p>
     </div>
 
-    <p class="warn card">Yalnızca yetkili güvenlik testleri ve eğitim için. AGPL lisansı.
-      <a href="https://github.com/modabucksmain-pixel/Bruce-DIY-Flipper">Kaynak kod & detaylar →</a></p>
+    <p class="warn card">For authorized security testing and education only. AGPL licensed.
+      <a href="https://github.com/modabucksmain-pixel/Bruce-DIY-Flipper">Source code &amp; details →</a></p>
   </div>
 </body>
 </html>
