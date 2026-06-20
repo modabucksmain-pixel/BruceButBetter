@@ -91,9 +91,11 @@ modules wired in on top of upstream Bruce.
 
 ## DOWNLOAD / FLASH
 
-> The prebuilt binaries and the web flasher are for the **DIY ESP-General target (ESP32-S3 N16R8)**.
-> Other [supported boards](#supported-boards) (Cardputer, CYD, Lilygo, ESP32-C5 …) run different chips —
-> build those from source: `pio run -e <env>`.
+> The **web flasher** targets only the **DIY ESP-General build (ESP32-S3 N16R8)**.
+> For every other board, the [latest release](https://github.com/Yoursel71/BruceButBetter/releases/latest)
+> now ships **prebuilt merged binaries for 45 boards** — grab `Bruce-<board>.bin` and flash it at
+> offset `0x0` (see [Manual](#manual)). Only the `esp32-c5` variants and `arduino-nesso-n1` still need
+> a from-source build (`pio run -e <env>`).
 
 ### Browser flasher (recommended)
 
@@ -130,6 +132,14 @@ esptool.py --chip esp32s3 --port COMx write_flash \
 | `partitions.bin` | `0x8000` | Partition table |
 | `boot_app0.bin` | `0xe000` | OTA selector |
 | `firmware.bin` | `0x10000` | Application |
+
+**Other boards** — the release also has a merged `Bruce-<board>.bin` for 45 targets (Cardputer, CYD,
+Lilygo, M5Stack, Marauder, Elecrow …). Flash it the same way; use `--chip esp32` for classic-ESP32
+boards or `--chip esp32s3` for S3 boards:
+
+```sh
+esptool.py --chip <esp32|esp32s3> --port COMx write_flash 0x0 Bruce-<board>.bin
+```
 
 ---
 
