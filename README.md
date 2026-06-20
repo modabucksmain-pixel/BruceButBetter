@@ -20,6 +20,7 @@ Sub-GHz · NFC/RFID · IR · WiFi/BLE · NRF24 · Si5351 signal generator — on
 [![Issues](https://img.shields.io/github/issues/Yoursel71/BruceButBetter?style=flat-square&color=f78166&label=issues)](https://github.com/Yoursel71/BruceButBetter/issues)
 [![Last commit](https://img.shields.io/github/last-commit/Yoursel71/BruceButBetter?style=flat-square&color=6e7681&label=last%20commit)](https://github.com/Yoursel71/BruceButBetter/commits)
 
+**[ BUILD YOUR OWN ](./docs/BUILD.md)** ·
 **[ WEB FLASHER ](https://Yoursel71.github.io/BruceButBetter/)** ·
 **[ RELEASES ](https://github.com/Yoursel71/BruceButBetter/releases)** ·
 **[ CONTRIBUTE ](./CONTRIBUTING.md)** ·
@@ -39,6 +40,20 @@ dual USB-C, and an added Si5351 signal-generator module. One binary covers every
 
 > **Legal notice** — For **authorized** security testing and education only. Distributed under AGPL.
 > Unauthorized or malicious use is prohibited. You assume all responsibility.
+
+---
+
+## 🔧 Build one yourself (~$40)
+
+Want this device? The full **[DIY build guide →](./docs/BUILD.md)** has the bill of materials with
+purchase links, a wiring diagram, step-by-step assembly, and one-click flashing. Start with the
+ESP32-S3 + screen + buttons (~$13), add radios when you want them.
+
+| Tier | Parts | Cost |
+|---|---|---|
+| Minimum (UI) | ESP32-S3 + OLED + buttons | ~$13 |
+| Recommended | + CC1101 + PN532 + IR + microSD | ~$25 |
+| Full | + 2× NRF24 + Si5351 + battery | ~$40 |
 
 ---
 
