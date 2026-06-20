@@ -239,7 +239,12 @@ Output: `.pio/build/esp32-s3-devkitc-1-psram/firmware.bin`. Active board set by 
 ## SUPPORTED BOARDS
 
 The default build targets the custom **ESP-General** DIY hardware. The **full upstream Bruce board
-matrix (30 boards)** is also ported in — build any with `pio run -e <env>`. Common targets:
+matrix** is also ported in — build any with `pio run -e <env>`. Common targets:
+
+> ✓ **45 of these ship a prebuilt, ready-to-flash `Bruce-<env>.bin`** in the
+> [latest release](https://github.com/Yoursel71/BruceButBetter/releases/latest) — no toolchain needed
+> (see [Download / Flash](#download--flash)). Only the `esp32-c5` variants and `arduino-nesso-n1`
+> still build from source.
 
 | Board | Build env (`-e`) | Notes |
 |---|---|---|
