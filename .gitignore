@@ -20,4 +20,10 @@ lib/mquickjs_headers/mqjs_stdlib_generator
 lib/mquickjs_headers/mqjs_stdlib_generator.exe
 .github/agents/Bruce-AI.agent.md
 .idea
-.ai
+.ai.monitor/
+
+# Local build artifacts & monitor state (not for the repo)
+/overnight-bins/
+/.monitor/
+/build_*.sh
+/rebuild_failed.sh
