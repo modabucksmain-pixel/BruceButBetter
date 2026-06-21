@@ -7,6 +7,9 @@ All notable changes to BruceButBetter. Format loosely follows
 ## [Unreleased]
 
 ### Added
+- **Capture the 2.4 GHz band to CSV.** New NRF24 menu entry *Spectrum → CSV* samples the band and
+  writes `channel,freq_mhz,activity` for all 80 channels to `/BruceRF/nrf_spectrum_<ms>.csv`, reporting
+  the busiest channel. The 2.4 GHz counterpart of the sub-GHz capture.
 - **Capture a sub-GHz sweep to CSV.** New RF menu entry *Spectrum → CSV* sweeps the selected sub-GHz
   range and writes `freq_mhz,rssi_dbm` for every step to `/BruceRF/spectrum_<ms>.csv` on SD/LittleFS,
   so a band profile can be analysed off-device. Reports the peak and the saved path; ESC aborts with a
