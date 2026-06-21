@@ -4,6 +4,22 @@ All notable changes to BruceButBetter. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/); this project is a downstream fork of
 [pr3y/Bruce](https://github.com/pr3y/Bruce).
 
+## [1.1.0] — 2026-06-21
+
+### Added
+- **Hardware Self-Test** — new top-level menu that scans the I²C bus and reports every device that
+  answers, labelling the modules this build expects (OLED, PN532, Si5351, RTC, sensors). For DIY
+  builders verifying their wiring.
+- **Si5351 live calibration** — "Calibrate" entry in RF Gen: 10 MHz reference on CLK0 with live ppb
+  correction trimming (variable step), applied for the session.
+- **Dual-NRF24 spectrum** — the 2.4 GHz analyzer uses a second NRF24 (when populated) to scan odd
+  channels in parallel with radio 1's even channels (~2× faster sweep); single-radio fallback.
+- **Multi-board web flasher** — the browser flasher now flashes any of 45 boards (chip family
+  auto-matched), bins served same-origin from GitHub Pages.
+
+### Notes
+- The dual-NRF24 parallel-RF path is compile-verified; validate on real dual-radio hardware.
+
 ## [1.0.0] — 2026-06-20
 
 First public release of the DIY ESP32-S3 N16R8 build.

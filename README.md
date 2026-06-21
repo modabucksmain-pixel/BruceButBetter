@@ -80,8 +80,16 @@ modules wired in on top of upstream Bruce.
 | **RFID key attack** | Key-recovery attack flow on the RFID menu |
 | **Custom boot logo** | Branded splash on startup |
 
+### New firmware features (v1.1.0 — not in upstream)
+| Feature | What it does |
+|---|---|
+| **Hardware Self-Test** | Top-level menu that scans the I²C bus and reports every module that answers (OLED, PN532, Si5351, RTC, sensors) with `[OK] 0xNN` — verify your wiring/soldering in seconds. |
+| **Si5351 live calibration** | Outputs a 10 MHz reference on CLK0 and lets you trim the crystal correction (ppb, variable step) live to zero-beat against a known source. |
+| **Dual-NRF24 spectrum** | When a second NRF24 is populated, the 2.4 GHz analyzer scans odd channels on radio 2 in parallel with radio 1's even channels — ~2× faster sweep (`2x` badge). Auto-falls back to single radio. |
+
 ### Packaging
-- **One-click [browser flasher](https://Yoursel71.github.io/BruceButBetter/)** (esp-web-tools) + landing site.
+- **One-click [browser flasher](https://Yoursel71.github.io/BruceButBetter/)** — pick **any of 45 boards** and
+  flash from the browser (esp-web-tools), no toolchain.
 - Device advertises as **`BruceButBetter`** on USB / BLE / screen.
 
 > Everything else tracks upstream [Bruce](https://github.com/pr3y/Bruce); useful changes are meant to flow
