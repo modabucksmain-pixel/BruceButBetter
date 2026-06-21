@@ -7,6 +7,10 @@ All notable changes to BruceButBetter. Format loosely follows
 ## [Unreleased]
 
 ### Added
+- **Capture a sub-GHz sweep to CSV.** New RF menu entry *Spectrum → CSV* sweeps the selected sub-GHz
+  range and writes `freq_mhz,rssi_dbm` for every step to `/BruceRF/spectrum_<ms>.csv` on SD/LittleFS,
+  so a band profile can be analysed off-device. Reports the peak and the saved path; ESC aborts with a
+  partial save.
 - **CC1101 RSSI spectrum: peak-hold + dBm.** The sub-GHz range-scan analyzer (RF → RSSI Spectrum)
   now keeps a peak-hold cap above each bar so brief signals stay on screen, and the Max readout shows
   the strongest signal's dBm next to its frequency. Mono-OLED friendly.
