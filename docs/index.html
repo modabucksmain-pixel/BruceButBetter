@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bruce But Better // ESP32-S3 Multitool · Web Flasher</title>
   <meta name="description" content="DIY Flipper Zero on ESP32-S3 N16R8 running Bruce firmware. Sub-GHz, NFC/RFID, IR, WiFi/BLE, NRF24 and a Si5351 signal generator. Flash it from the browser." />
-  <meta name="theme-color" content="#05080d" />
+  <meta name="theme-color" content="#070611" />
 
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Bruce But Better // ESP32-S3 Multitool" />
@@ -14,7 +14,7 @@
   <meta property="og:url" content="https://Yoursel71.github.io/BruceButBetter/" />
   <meta name="twitter:card" content="summary_large_image" />
 
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2305080d'/%3E%3Cpath d='M6 22 C12 4 24 2 27 17 C22 13 16 14 12 22 Z' fill='%232ee6d6'/%3E%3C/svg%3E" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23070611'/%3E%3Cpath d='M6 22 C12 4 24 2 27 17 C22 13 16 14 12 22 Z' fill='%23ff2e97'/%3E%3C/svg%3E" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,178 +23,196 @@
   <script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
   <style>
     :root{
-      --bg:#05080d; --bg2:#070b12; --panel:#0a0f17; --panel2:#0d141e;
-      --fg:#dbe5f0; --muted:#7d8b9c; --dim:#4a5568;
-      --cyan:#2ee6d6; --green:#2ea043; --green2:#3fb950; --blue:#1f6feb; --blue2:#58a6ff;
-      --warn:#d6b34a; --danger:#ff5c5c; --line:#16202c; --line2:#1d2937;
+      --bg:#070611; --bg2:#0a0817; --panel:#0f0b1e; --panel2:#140e26;
+      --fg:#ece9fb; --muted:#9a92b8; --dim:#5f5880;
+      --magenta:#ff2e97; --cyan:#22e7ff; --violet:#a855f7;
+      --warn:#ffcb47; --danger:#ff4d6d;
+      --line:#211a3a; --line2:#2f2553;
       --mono:"JetBrains Mono",Consolas,"SF Mono",monospace;
       --sans:"Space Grotesk",-apple-system,"Segoe UI",sans-serif;
+      --grad:linear-gradient(92deg,var(--magenta),var(--violet) 55%,var(--cyan));
     }
     *{box-sizing:border-box}
-    html{scroll-behavior:smooth; scroll-padding-top:74px}
-    body{
-      margin:0; font-family:var(--sans); background:var(--bg); color:var(--fg);
-      line-height:1.65; overflow-x:hidden; -webkit-font-smoothing:antialiased;
-    }
-    /* global atmosphere */
-    body::before{content:""; position:fixed; inset:0; z-index:-2; pointer-events:none;
+    html{scroll-behavior:smooth; scroll-padding-top:72px}
+    body{margin:0; font-family:var(--sans); background:var(--bg); color:var(--fg);
+      line-height:1.62; overflow-x:hidden; -webkit-font-smoothing:antialiased}
+    /* atmosphere: neon glow blobs + perspective grid + scanlines */
+    body::before{content:""; position:fixed; inset:0; z-index:-3; pointer-events:none;
       background:
-        radial-gradient(1100px 520px at 50% -10%, rgba(46,230,214,.10), transparent 60%),
-        radial-gradient(900px 500px at 90% 20%, rgba(31,111,235,.08), transparent 60%),
-        linear-gradient(180deg,var(--bg),var(--bg2));}
-    body::after{content:""; position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:.5;
-      background:repeating-linear-gradient(0deg, rgba(255,255,255,.018) 0 1px, transparent 1px 3px);}
+        radial-gradient(900px 480px at 18% -8%, rgba(255,46,151,.16), transparent 60%),
+        radial-gradient(820px 520px at 88% 6%, rgba(34,231,255,.13), transparent 62%),
+        radial-gradient(700px 600px at 50% 108%, rgba(168,85,247,.12), transparent 60%),
+        linear-gradient(180deg,var(--bg),var(--bg2))}
+    body::after{content:""; position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:.35;
+      background:repeating-linear-gradient(0deg, rgba(255,255,255,.025) 0 1px, transparent 1px 3px)}
+    .scene{position:fixed; inset:0; z-index:-2; pointer-events:none; overflow:hidden;
+      mask-image:linear-gradient(180deg,#000 0 38%,transparent 78%);
+      -webkit-mask-image:linear-gradient(180deg,#000 0 38%,transparent 78%)}
+    .scene i{position:absolute; left:-25%; right:-25%; top:0; bottom:-40%;
+      background-image:linear-gradient(rgba(168,85,247,.18) 1px,transparent 1px),
+                       linear-gradient(90deg,rgba(34,231,255,.14) 1px,transparent 1px);
+      background-size:54px 54px; transform:perspective(420px) rotateX(62deg);
+      transform-origin:50% 0; animation:flow 7s linear infinite}
+    @keyframes flow{to{background-position:0 54px}}
     a{color:var(--cyan); text-decoration:none}
-    a:hover{text-decoration:underline}
-    h1,h2,h3,h4{margin:0; line-height:1.2; letter-spacing:-.01em}
+    a:hover{color:#7df2ff}
+    h1,h2,h3,h4{margin:0; line-height:1.12; letter-spacing:-.01em}
     .mono{font-family:var(--mono)}
-    code{font-family:var(--mono); background:#0b121b; border:1px solid var(--line); padding:1px 6px;
-      border-radius:5px; font-size:.84em; color:#bfe9e4}
-    .container{max-width:1120px; margin:0 auto; padding:0 22px}
-    section{padding:84px 0; position:relative}
-
-    .label{font-family:var(--mono); color:var(--cyan); font-size:.76rem; letter-spacing:.22em;
-      text-transform:uppercase; margin-bottom:14px; display:flex; align-items:center; gap:10px}
-    .label::before{content:""; width:26px; height:1px; background:var(--cyan); box-shadow:0 0 8px var(--cyan)}
-    .sec-title{font-size:clamp(1.7rem,3.4vw,2.4rem); font-weight:700; margin-bottom:12px}
-    .sec-sub{color:var(--muted); max-width:660px; margin-bottom:46px}
+    code{font-family:var(--mono); background:#130d24; border:1px solid var(--line2); padding:1px 6px;
+      border-radius:5px; font-size:.84em; color:#ffc6e6}
+    .container{max-width:1140px; margin:0 auto; padding:0 22px}
+    section{padding:88px 0; position:relative}
+    .kicker{font-family:var(--mono); font-size:.74rem; letter-spacing:.26em; text-transform:uppercase;
+      margin-bottom:14px; display:flex; align-items:center; gap:10px;
+      background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent}
+    .kicker::before{content:""; width:26px; height:2px; border-radius:2px; background:var(--magenta);
+      box-shadow:0 0 10px var(--magenta)}
+    .sec-title{font-size:clamp(1.8rem,3.6vw,2.6rem); font-weight:700; margin-bottom:12px}
+    .sec-sub{color:var(--muted); max-width:680px; margin-bottom:48px}
 
     /* NAV */
-    nav{position:sticky; top:0; z-index:60; backdrop-filter:blur(14px);
-      background:rgba(5,8,13,.7); border-bottom:1px solid var(--line)}
-    .nav-in{display:flex; align-items:center; gap:8px; height:62px; max-width:1120px; margin:0 auto; padding:0 22px}
+    nav{position:sticky; top:0; z-index:60; backdrop-filter:blur(16px);
+      background:rgba(7,6,17,.72); border-bottom:1px solid var(--line)}
+    .nav-in{display:flex; align-items:center; gap:8px; height:60px; max-width:1140px; margin:0 auto; padding:0 22px}
     .brand{font-family:var(--mono); font-weight:700; font-size:.98rem; margin-right:auto;
       display:flex; align-items:center; gap:10px; letter-spacing:.02em}
-    .brand svg{filter:drop-shadow(0 0 6px rgba(46,230,214,.6))}
-    .brand .v{color:var(--dim); font-weight:400; font-size:.8rem}
+    .brand svg{filter:drop-shadow(0 0 7px rgba(255,46,151,.7))}
+    .brand .v{background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent; font-weight:600}
     .nav-links{display:flex; gap:2px; align-items:center}
-    .nav-links a{font-family:var(--mono); color:var(--muted); font-size:.84rem; padding:8px 13px;
-      border-radius:7px; letter-spacing:.02em}
-    .nav-links a:hover{color:var(--cyan); background:rgba(46,230,214,.06); text-decoration:none}
-    .nav-cta{color:var(--bg) !important; background:var(--cyan); font-weight:700 !important;
-      box-shadow:0 0 18px -4px var(--cyan)}
-    .nav-cta:hover{background:#3ff0e0 !important}
+    .nav-links a{font-family:var(--mono); color:var(--muted); font-size:.83rem; padding:8px 13px;
+      border-radius:8px; letter-spacing:.02em}
+    .nav-links a:hover{color:var(--fg); background:rgba(168,85,247,.12)}
+    .nav-cta{color:#0a0612 !important; background:var(--grad); font-weight:700 !important;
+      box-shadow:0 0 20px -4px var(--magenta)}
     .burger{display:none; background:none; border:0; color:var(--fg); font-size:1.4rem; cursor:pointer}
 
-    /* HUD corner brackets */
-    .hud{position:relative; border:1px solid var(--line2); background:rgba(10,15,23,.6); border-radius:12px}
-    .hud::before,.hud::after{content:""; position:absolute; width:14px; height:14px; border:1.5px solid var(--cyan); opacity:.7}
-    .hud::before{top:-1px; left:-1px; border-right:0; border-bottom:0}
-    .hud::after{bottom:-1px; right:-1px; border-left:0; border-top:0}
+    /* neon card */
+    .neon{position:relative; border:1px solid var(--line2); background:rgba(16,11,30,.66);
+      border-radius:14px; overflow:hidden}
+    .neon::before{content:""; position:absolute; inset:0; border-radius:14px; padding:1px; pointer-events:none;
+      background:linear-gradient(140deg,rgba(255,46,151,.5),transparent 40%,transparent 60%,rgba(34,231,255,.45));
+      -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+      -webkit-mask-composite:xor; mask-composite:exclude; opacity:.7}
 
     /* HERO */
-    .hero{padding:84px 0 60px; text-align:center; position:relative; overflow:hidden}
-    .hero .grid-bg{position:absolute; inset:0; z-index:0;
-      background-image:linear-gradient(rgba(29,41,55,.55) 1px,transparent 1px),
-                       linear-gradient(90deg,rgba(29,41,55,.55) 1px,transparent 1px);
-      background-size:46px 46px;
-      mask-image:radial-gradient(ellipse 72% 62% at 50% 32%,#000,transparent 76%);
-      -webkit-mask-image:radial-gradient(ellipse 72% 62% at 50% 32%,#000,transparent 76%)}
-    .hero-in{position:relative; z-index:1}
-    .status{display:inline-flex; align-items:center; gap:10px; font-family:var(--mono); font-size:.78rem;
-      color:var(--muted); border:1px solid var(--line2); background:rgba(10,15,23,.7);
-      border-radius:999px; padding:7px 16px; margin-bottom:30px; letter-spacing:.04em}
-    .status .led{width:8px; height:8px; border-radius:50%; background:var(--green2);
-      box-shadow:0 0 0 0 rgba(63,185,80,.7); animation:pulse 2s infinite}
-    @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(63,185,80,.5)}70%{box-shadow:0 0 0 9px rgba(63,185,80,0)}100%{box-shadow:0 0 0 0 rgba(63,185,80,0)}}
-    .hero h1{font-size:clamp(2.3rem,6vw,4.1rem); font-weight:700; letter-spacing:-.025em; margin-bottom:8px}
-    .hero h1 .grad{background:linear-gradient(92deg,var(--cyan),var(--blue2));
-      -webkit-background-clip:text; background-clip:text; color:transparent;
-      text-shadow:0 0 36px rgba(46,230,214,.25)}
-    .term{font-family:var(--mono); color:var(--green2); font-size:1.02rem; margin:18px 0 6px; min-height:1.4em}
-    .term .cur{display:inline-block; width:9px; height:1.05em; background:var(--green2); vertical-align:-2px;
+    .hero{padding:78px 0 56px; text-align:center; position:relative}
+    .chip{display:inline-flex; align-items:center; gap:10px; font-family:var(--mono); font-size:.76rem;
+      color:var(--muted); border:1px solid var(--line2); background:rgba(16,11,30,.7);
+      border-radius:999px; padding:7px 16px; margin-bottom:28px; letter-spacing:.04em}
+    .chip .led{width:8px; height:8px; border-radius:50%; background:var(--magenta);
+      box-shadow:0 0 8px var(--magenta); animation:pulse 1.8s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+    .hero h1{font-size:clamp(2.5rem,7vw,5rem); font-weight:700; letter-spacing:-.03em; margin:0}
+    .glitch{position:relative; display:inline-block;
+      background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent}
+    .glitch::before,.glitch::after{content:attr(data-text); position:absolute; inset:0;
+      -webkit-background-clip:text; background-clip:text; color:transparent; opacity:.85}
+    .glitch::before{background:linear-gradient(92deg,var(--magenta),var(--magenta));
+      animation:gl1 3.6s infinite steps(2,end); clip-path:inset(0 0 55% 0)}
+    .glitch::after{background:linear-gradient(92deg,var(--cyan),var(--cyan));
+      animation:gl2 3.2s infinite steps(2,end); clip-path:inset(58% 0 0 0)}
+    @keyframes gl1{0%,92%,100%{transform:none;opacity:0}93%{transform:translate(-3px,-1px);opacity:.9}96%{transform:translate(2px,1px);opacity:.7}}
+    @keyframes gl2{0%,90%,100%{transform:none;opacity:0}94%{transform:translate(3px,1px);opacity:.85}98%{transform:translate(-2px,-1px);opacity:.6}}
+    .hero .sub-h1{display:block; font-size:clamp(1rem,2.4vw,1.4rem); color:var(--muted); font-weight:500;
+      letter-spacing:.02em; margin-top:14px}
+    .term{font-family:var(--mono); color:var(--cyan); font-size:1rem; margin:20px 0 4px; min-height:1.4em;
+      text-shadow:0 0 18px rgba(34,231,255,.4)}
+    .term .cur{display:inline-block; width:9px; height:1.05em; background:var(--cyan); vertical-align:-2px;
       margin-left:3px; animation:blink 1.05s step-end infinite}
     @keyframes blink{50%{opacity:0}}
-    .hero p.lead{font-size:1.12rem; color:var(--muted); max-width:660px; margin:14px auto 32px}
-    .cta-row{display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin-bottom:42px}
-    .btn{display:inline-flex; align-items:center; gap:10px; border:none; border-radius:9px;
-      padding:14px 26px; font-family:var(--mono); font-size:.94rem; font-weight:700; cursor:pointer;
+    .lead{font-size:1.1rem; color:var(--muted); max-width:640px; margin:16px auto 34px}
+    .cta-row{display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin-bottom:46px}
+    .btn{display:inline-flex; align-items:center; gap:10px; border:none; border-radius:10px;
+      padding:14px 26px; font-family:var(--mono); font-size:.92rem; font-weight:700; cursor:pointer;
       letter-spacing:.03em; transition:.16s; text-transform:uppercase}
-    .btn-primary{background:var(--cyan); color:#04201d; box-shadow:0 0 26px -6px var(--cyan)}
-    .btn-primary:hover{transform:translateY(-2px); text-decoration:none; box-shadow:0 0 38px -4px var(--cyan); background:#3ff0e0}
+    .btn-primary{background:var(--grad); color:#0a0612; box-shadow:0 0 28px -6px var(--magenta)}
+    .btn-primary:hover{transform:translateY(-2px); box-shadow:0 0 42px -4px var(--violet)}
     .btn-ghost{background:transparent; color:var(--fg); border:1px solid var(--line2)}
-    .btn-ghost:hover{border-color:var(--cyan); color:var(--cyan); text-decoration:none; box-shadow:0 0 22px -10px var(--cyan)}
-    esp-web-install-button{display:inline-block}
-    .board-label{display:block; font-family:var(--mono); color:var(--muted); font-size:.8rem; margin:0 0 6px}
-    .board-select{font-family:var(--mono); font-size:.9rem; background:var(--bg2); color:var(--cyan);
-      border:1px solid var(--line); border-radius:8px; padding:10px 12px; margin:0 0 18px; min-width:280px; max-width:100%;
-      cursor:pointer; outline:none}
-    .board-select:focus{border-color:var(--cyan)}
-    .board-select optgroup{color:var(--muted); background:#0d1117}
-    .board-select option{color:#e6edf3; background:#161b22}
-    .hero-banner{max-width:780px; width:100%; margin:6px auto 0; display:block; border-radius:12px;
-      border:1px solid var(--line2); box-shadow:0 30px 80px -30px rgba(46,230,214,.3)}
+    .btn-ghost:hover{border-color:var(--cyan); color:var(--cyan); box-shadow:0 0 22px -10px var(--cyan)}
+    .hero-banner{max-width:760px; width:100%; margin:8px auto 0; display:block; border-radius:14px;
+      border:1px solid var(--line2); box-shadow:0 30px 90px -34px rgba(168,85,247,.55)}
 
     /* STATS */
-    .stats{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:48px}
+    .stats{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:52px}
     .stat{padding:22px 14px; text-align:center}
-    .stat .n{font-family:var(--mono); font-size:1.55rem; font-weight:700; color:var(--cyan)}
-    .stat .l{color:var(--muted); font-size:.8rem; font-family:var(--mono); letter-spacing:.04em; margin-top:4px}
+    .stat .n{font-family:var(--mono); font-size:1.5rem; font-weight:700;
+      background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent}
+    .stat .l{color:var(--muted); font-size:.78rem; font-family:var(--mono); letter-spacing:.05em; margin-top:5px}
 
     /* FLASH */
-    .flash-card{padding:44px 30px; text-align:center; position:relative; overflow:hidden;
-      background:linear-gradient(180deg,rgba(46,230,214,.05),rgba(10,15,23,.6))}
-    .flash-card h3{font-family:var(--mono); font-size:1.2rem; margin-bottom:6px; letter-spacing:.03em}
-    .steps{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:38px; text-align:left}
+    .flash-card{padding:46px 30px; text-align:center}
+    .flash-card h3{font-family:var(--mono); font-size:1.18rem; margin-bottom:8px; letter-spacing:.03em}
+    .board-label{display:block; font-family:var(--mono); color:var(--muted); font-size:.78rem;
+      margin:0 0 6px; text-align:left; letter-spacing:.04em}
+    .board-select{width:100%; font-family:var(--mono); font-size:.9rem; background:var(--bg2); color:var(--cyan);
+      border:1px solid var(--line2); border-radius:9px; padding:11px 12px; margin:0 0 16px;
+      cursor:pointer; outline:none}
+    .board-select:focus{border-color:var(--magenta)}
+    .board-select optgroup{color:var(--muted); background:#0d0a18}
+    .board-select option{color:#ece9fb; background:#140e26}
+    .flash-fields{max-width:430px; margin:0 auto 8px}
+    .steps{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:40px; text-align:left}
     .step{padding:20px}
-    .step .num{font-family:var(--mono); color:var(--cyan); font-size:.8rem; letter-spacing:.1em; margin-bottom:10px}
-    .step h4{font-family:var(--mono); font-size:.98rem; margin-bottom:5px}
-    .step p{margin:0; color:var(--muted); font-size:.9rem}
-    .warnbox{margin-top:24px; background:rgba(214,179,74,.06); border:1px solid rgba(214,179,74,.32);
-      border-radius:10px; padding:14px 18px; color:#e0cd8e; font-size:.88rem; text-align:left; font-family:var(--mono)}
+    .step .num{font-family:var(--mono); font-size:.78rem; letter-spacing:.1em; margin-bottom:10px;
+      background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent}
+    .step h4{font-family:var(--mono); font-size:.96rem; margin-bottom:5px}
+    .step p{margin:0; color:var(--muted); font-size:.89rem}
+    .warnbox{margin-top:24px; background:rgba(255,203,71,.06); border:1px solid rgba(255,203,71,.3);
+      border-radius:11px; padding:14px 18px; color:#f0d98a; font-size:.87rem; text-align:left; font-family:var(--mono)}
     .unsupported{display:none; color:var(--danger); font-weight:700; font-family:var(--mono)}
 
     /* FEATURES */
     .feat-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
     .feat{padding:24px; transition:.18s}
-    .feat:hover{transform:translateY(-4px); border-color:var(--line2);
-      box-shadow:0 20px 50px -26px var(--cyan)}
-    .feat .tag{font-family:var(--mono); font-size:.72rem; letter-spacing:.12em; color:var(--cyan);
-      border:1px solid rgba(46,230,214,.3); border-radius:6px; padding:3px 9px; display:inline-block; margin-bottom:14px}
-    .feat h3{font-family:var(--mono); font-size:1.06rem; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center}
-    .feat h3 .freq{font-size:.72rem; color:var(--dim); font-weight:400}
-    .feat ul{margin:0; padding-left:16px; color:var(--muted); font-size:.9rem}
+    .feat:hover{transform:translateY(-4px); box-shadow:0 24px 60px -30px var(--violet)}
+    .feat .tag{font-family:var(--mono); font-size:.7rem; letter-spacing:.12em; color:var(--magenta);
+      border:1px solid rgba(255,46,151,.36); border-radius:6px; padding:3px 9px; display:inline-block; margin-bottom:14px}
+    .feat h3{font-family:var(--mono); font-size:1.04rem; margin-bottom:10px; display:flex;
+      justify-content:space-between; align-items:center; gap:8px}
+    .feat h3 .freq{font-size:.7rem; color:var(--dim); font-weight:400}
+    .feat ul{margin:0; padding-left:16px; color:var(--muted); font-size:.89rem}
     .feat li{margin:4px 0}
-    .feat li::marker{color:var(--green2)}
+    .feat li::marker{color:var(--cyan)}
+    .new-badge{font-family:var(--mono); font-size:.62rem; letter-spacing:.1em; color:var(--cyan);
+      border:1px solid rgba(34,231,255,.4); border-radius:5px; padding:1px 6px; margin-left:6px}
 
     /* HARDWARE / PINOUT */
-    .grid2{display:grid; grid-template-columns:1.05fr 1fr; gap:26px; align-items:start}
+    .grid2{display:grid; grid-template-columns:1.05fr 1fr; gap:24px; align-items:start}
     .panel{padding:26px}
-    .panel h3{font-family:var(--mono); margin-bottom:16px; letter-spacing:.03em; color:var(--fg)}
-    table{width:100%; border-collapse:collapse; font-size:.91rem}
+    .panel h3{font-family:var(--mono); margin-bottom:16px; letter-spacing:.03em}
+    table{width:100%; border-collapse:collapse; font-size:.9rem}
     th,td{text-align:left; padding:9px 10px; border-bottom:1px solid var(--line)}
-    th{color:var(--muted); font-weight:600; font-size:.74rem; text-transform:uppercase; letter-spacing:.08em; font-family:var(--mono)}
+    th{color:var(--muted); font-weight:600; font-size:.72rem; text-transform:uppercase; letter-spacing:.08em; font-family:var(--mono)}
     tr:last-child td{border-bottom:none}
     td b{color:var(--fg)}
-    .pin{font-family:var(--mono); font-size:.84rem; background:#060a10; border:1px solid var(--line);
-      border-radius:10px; padding:16px; color:#aebccb; line-height:1.95; overflow-x:auto}
-    .pin .c{color:var(--green2)} .pin .b{color:var(--cyan)} .pin .d{color:var(--danger)}
-    .danger{border-color:rgba(255,92,92,.3)}
+    .pin{font-family:var(--mono); font-size:.83rem; background:#0a0715; border:1px solid var(--line2);
+      border-radius:11px; padding:16px; color:#b6acd6; line-height:1.95; overflow-x:auto}
+    .pin .c{color:var(--cyan)} .pin .b{color:var(--magenta)} .pin .d{color:var(--danger)}
     .danger h3{color:var(--danger)}
 
     /* CODE */
-    .code{position:relative; font-family:var(--mono); font-size:.85rem; color:#bfe9e4;
-      background:#060a10; border:1px solid var(--line); border-radius:10px; padding:18px 20px; overflow-x:auto}
-    .copy{position:absolute; top:9px; right:9px; background:rgba(46,230,214,.08); border:1px solid var(--line2);
-      color:var(--cyan); border-radius:7px; padding:4px 11px; font-size:.74rem; cursor:pointer; font-family:var(--mono)}
-    .copy:hover{background:rgba(46,230,214,.16)}
+    .code{position:relative; font-family:var(--mono); font-size:.84rem; color:#ffc6e6;
+      background:#0a0715; border:1px solid var(--line2); border-radius:11px; padding:18px 20px; overflow-x:auto}
+    .copy{position:absolute; top:9px; right:9px; background:rgba(168,85,247,.12); border:1px solid var(--line2);
+      color:var(--cyan); border-radius:7px; padding:4px 11px; font-size:.73rem; cursor:pointer; font-family:var(--mono)}
+    .copy:hover{background:rgba(168,85,247,.24)}
 
     /* FAQ */
-    details{border:1px solid var(--line2); border-radius:11px; padding:0 20px; margin-bottom:10px; background:rgba(10,15,23,.5)}
+    details{border:1px solid var(--line2); border-radius:12px; padding:0 20px; margin-bottom:10px; background:rgba(16,11,30,.55)}
     summary{cursor:pointer; font-family:var(--mono); font-weight:500; padding:16px 0; list-style:none;
       display:flex; justify-content:space-between; align-items:center; gap:12px}
     summary::-webkit-details-marker{display:none}
-    summary::after{content:"+"; color:var(--cyan); font-size:1.3rem}
-    details[open] summary::after{content:"–"}
-    details[open]{border-color:rgba(46,230,214,.3)}
+    summary::after{content:"+"; color:var(--magenta); font-size:1.3rem}
+    details[open] summary::after{content:"–"; color:var(--cyan)}
+    details[open]{border-color:rgba(168,85,247,.4)}
     details p{margin:0 0 16px; color:var(--muted)}
 
     /* FOOTER */
     footer{border-top:1px solid var(--line); padding:50px 0 44px; color:var(--muted)}
     .foot-grid{display:flex; justify-content:space-between; gap:30px; flex-wrap:wrap}
-    .foot-links{display:flex; gap:22px; flex-wrap:wrap; font-family:var(--mono); font-size:.86rem}
+    .foot-links{display:flex; gap:22px; flex-wrap:wrap; font-family:var(--mono); font-size:.85rem}
     .foot-links a{color:var(--muted)} .foot-links a:hover{color:var(--cyan)}
-    .legal{margin-top:26px; font-size:.84rem; color:var(--dim); border-top:1px solid var(--line); padding-top:22px; font-family:var(--mono)}
+    .legal{margin-top:26px; font-size:.83rem; color:var(--dim); border-top:1px solid var(--line); padding-top:22px; font-family:var(--mono)}
     .legal b{color:var(--warn)}
 
     .reveal{opacity:0; transform:translateY(22px); transition:.6s ease}
@@ -207,32 +225,35 @@
       .grid2{grid-template-columns:1fr}
     }
     @media(max-width:600px){
-      .nav-links{position:fixed; inset:62px 0 auto 0; flex-direction:column; background:var(--bg2);
+      .nav-links{position:fixed; inset:60px 0 auto 0; flex-direction:column; background:var(--bg2);
         border-bottom:1px solid var(--line); padding:12px; display:none}
       .nav-links.open{display:flex}
       .burger{display:block}
       .feat-grid{grid-template-columns:1fr}
-      section{padding:60px 0}
+      section{padding:62px 0}
+    }
+    @media(prefers-reduced-motion:reduce){
+      .scene i{animation:none} .glitch::before,.glitch::after{animation:none; opacity:0}
+      .term .cur{animation:none}
     }
   </style>
 </head>
 <body>
+<div class="scene"><i></i></div>
 
 <!-- NAV -->
 <nav>
   <div class="nav-in">
     <div class="brand">
-      <svg width="22" height="22" viewBox="0 0 32 32"><path d="M5 23 C12 3 25 1 28 18 C22 13 15 14 11 23 Z" fill="#2ee6d6"/><path d="M4 25 q12 4 24 0 q-4 4 -12 4 q-8 0 -12 -4 Z" fill="#1f6feb"/></svg>
+      <svg width="22" height="22" viewBox="0 0 32 32"><path d="M5 23 C12 3 25 1 28 18 C22 13 15 14 11 23 Z" fill="#ff2e97"/><path d="M4 25 q12 4 24 0 q-4 4 -12 4 q-8 0 -12 -4 Z" fill="#22e7ff"/></svg>
       BRUCE_BUT <span class="v">// better</span>
     </div>
     <div class="nav-links" id="navLinks">
       <a href="#flash">FLASH</a>
       <a href="#features">CAPABILITIES</a>
       <a href="#hardware">HARDWARE</a>
-      <a href="#pinout">PINOUT</a>
       <a href="#faq">FAQ</a>
-      <a href="https://github.com/Yoursel71/BruceButBetter/blob/master/docs/BUILD.md">BUILD ONE</a>
-      <a class="nav-cta" href="https://github.com/Yoursel71/BruceButBetter">GITHUB</a>
+      <a class="nav-cta" href="https://github.com/Yoursel71/BruceButBetter">GITHUB ★</a>
     </div>
     <button class="burger" id="burger" aria-label="Menu">≡</button>
   </div>
@@ -240,13 +261,13 @@
 
 <!-- HERO -->
 <header class="hero">
-  <div class="grid-bg"></div>
-  <div class="container hero-in">
-    <span class="status"><span class="led"></span> SYSTEM ONLINE · ESP32-S3 N16R8 · 16MB / 8MB PSRAM</span>
-    <h1>HANDHELD <span class="grad">RED-TEAM</span><br>MULTITOOL</h1>
+  <div class="container">
+    <span class="chip"><span class="led"></span> SYSTEM ONLINE · ESP32-S3 N16R8 · 16MB / 8MB PSRAM</span>
+    <h1><span class="glitch" data-text="BRUCE BUT BETTER">BRUCE BUT BETTER</span>
+      <span class="sub-h1">handheld red-team multitool · DIY Flipper Zero</span></h1>
     <div class="term"><span id="typed"></span><span class="cur"></span></div>
-    <p class="lead">A DIY Flipper Zero running the <b>Bruce</b> firmware. Sub-GHz, NFC/RFID, IR, WiFi and BLE,
-      NRF24, and a Si5351 signal generator — flashed straight from the browser.</p>
+    <p class="lead">One ESP32-S3 running the <b>Bruce</b> firmware — Sub-GHz, NFC/RFID, IR, WiFi/BLE, NRF24
+      and a Si5351 signal generator. Flashed straight from the browser.</p>
     <div class="cta-row">
       <a class="btn btn-primary" href="#flash">&gt; flash_device</a>
       <a class="btn btn-ghost" href="https://github.com/Yoursel71/BruceButBetter">star_repo</a>
@@ -254,10 +275,10 @@
     <img class="hero-banner" src="banner.svg" alt="Bruce But Better banner" />
 
     <div class="stats">
-      <div class="stat hud"><div class="n">09+</div><div class="l">MODULES</div></div>
-      <div class="stat hud"><div class="n">300-928</div><div class="l">MHz SUB-GHZ</div></div>
-      <div class="stat hud"><div class="n">1-CLICK</div><div class="l">BROWSER FLASH</div></div>
-      <div class="stat hud"><div class="n">AGPL</div><div class="l">OPEN SOURCE</div></div>
+      <div class="stat neon"><div class="n">09+</div><div class="l">MODULES</div></div>
+      <div class="stat neon"><div class="n">300–928</div><div class="l">MHz SUB-GHZ</div></div>
+      <div class="stat neon"><div class="n">50+</div><div class="l">BOARDS · BROWSER FLASH</div></div>
+      <div class="stat neon"><div class="n">AGPL</div><div class="l">OPEN SOURCE</div></div>
     </div>
   </div>
 </header>
@@ -265,19 +286,23 @@
 <!-- FLASH -->
 <section id="flash">
   <div class="container reveal">
-    <div class="label">// 01 — install</div>
+    <div class="kicker">// 01 — install</div>
     <h2 class="sec-title">Flash from the browser</h2>
-    <p class="sec-sub">No toolchain, no esptool. Plug in over the left USB-C, click, done — powered by esp-web-tools.</p>
+    <p class="sec-sub">No toolchain, no esptool. Pick a firmware version and your board, plug in over the
+      LEFT USB-C, click — done. Powered by esp-web-tools.</p>
 
-    <div class="flash-card hud">
+    <div class="flash-card neon">
       <h3>READY_TO_FLASH</h3>
-      <p style="color:var(--muted); margin:0 0 16px; font-family:var(--mono); font-size:.9rem">Pick a <b style="color:var(--cyan)">firmware version</b> and your board, connect via the LEFT USB-C (UART), then flash. <b style="color:var(--cyan)">50+ boards</b> &mdash; ESP32-S3 &amp; classic ESP32, straight from the browser.</p>
+      <p style="color:var(--muted); margin:0 0 22px; font-family:var(--mono); font-size:.88rem">
+        <b style="color:var(--cyan)">50+ boards</b> — ESP32-S3 &amp; classic ESP32, straight from the browser.</p>
 
-      <label for="verSelect" class="board-label">// firmware_version</label>
-      <select id="verSelect" class="board-select" aria-label="Select firmware version"></select>
+      <div class="flash-fields">
+        <label for="verSelect" class="board-label">// firmware_version</label>
+        <select id="verSelect" class="board-select" aria-label="Select firmware version"></select>
 
-      <label for="boardSelect" class="board-label">// target_board</label>
-      <select id="boardSelect" class="board-select" aria-label="Select board"></select>
+        <label for="boardSelect" class="board-label">// target_board</label>
+        <select id="boardSelect" class="board-select" aria-label="Select board"></select>
+      </div>
 
       <esp-web-install-button id="installBtn" manifest="manifest.json">
         <button class="btn btn-primary" slot="activate">&gt; flash_device</button>
@@ -286,15 +311,15 @@
       </esp-web-install-button>
 
       <div class="steps">
-        <div class="step hud"><div class="num">[ 01 ]</div><h4>CONNECT</h4><p>Plug the ESP32-S3 into the LEFT USB-C (UART/programming).</p></div>
-        <div class="step hud"><div class="num">[ 02 ]</div><h4>SELECT_PORT</h4><p>Run flash, pick the serial port, confirm connect.</p></div>
-        <div class="step hud"><div class="num">[ 03 ]</div><h4>INSTALL</h4><p>Keep "erase device" checked for a clean write, then wait.</p></div>
+        <div class="step neon"><div class="num">[ 01 ]</div><h4>CONNECT</h4><p>Plug the ESP32-S3 into the LEFT USB-C (UART / programming).</p></div>
+        <div class="step neon"><div class="num">[ 02 ]</div><h4>SELECT_PORT</h4><p>Run flash, pick the serial port, confirm connect.</p></div>
+        <div class="step neon"><div class="num">[ 03 ]</div><h4>INSTALL</h4><p>Keep "erase device" checked for a clean write, then wait.</p></div>
       </div>
 
       <div class="warnbox">! won't start? hold BOOT while connecting (or BOOT+RESET) to force download mode.
-        install CH34x / native-USB driver. desktop Chrome or Edge required.</div>
+        install the CH34x / native-USB driver. desktop Chrome or Edge required.</div>
 
-      <p style="color:var(--muted); margin:18px 0 0; font-family:var(--mono); font-size:.84rem">
+      <p style="color:var(--muted); margin:18px 0 0; font-family:var(--mono); font-size:.83rem">
         every image is also on the
         <a href="https://github.com/Yoursel71/BruceButBetter/releases">releases page</a> (per version) for
         manual esptool flashing. esp32-c5 / nesso-n1 build from source.</p>
@@ -305,38 +330,38 @@
 <!-- FEATURES -->
 <section id="features">
   <div class="container reveal">
-    <div class="label">// 02 — capabilities</div>
+    <div class="kicker">// 02 — capabilities</div>
     <h2 class="sec-title">Nine modules, one binary</h2>
     <p class="sec-sub">Hardware is probed at runtime. Flash a single image and use whatever chips you populated.</p>
 
     <div class="feat-grid">
-      <div class="feat hud"><span class="tag">WIFI</span>
+      <div class="feat neon"><span class="tag">WIFI</span>
         <h3>WiFi <span class="freq">2.4 GHz</span></h3>
-        <ul><li>Deauth</li><li>Beacon spam</li><li>Evil Portal</li><li>Sniffer · Wardriving</li><li>ARP spoof / poison</li><li>Responder</li></ul></div>
-      <div class="feat hud"><span class="tag">BLE</span>
-        <h3>Bluetooth LE <span class="freq">2.4 GHz</span></h3>
-        <ul><li>iOS / Windows spam</li><li>Samsung / Android spam</li><li>Bad BLE (Ducky)</li><li>Scan</li></ul></div>
-      <div class="feat hud"><span class="tag">CC1101</span>
-        <h3>Sub-GHz <span class="freq">300-928 MHz</span></h3>
-        <ul><li>Jammer</li><li>Scan / Copy</li><li>Replay</li><li>Custom SubGhz</li><li>Spectrum</li></ul></div>
-      <div class="feat hud"><span class="tag">PN532</span>
-        <h3>NFC / RFID <span class="freq">13.56 MHz</span></h3>
-        <ul><li>Read / Clone / Write</li><li>NDEF</li><li>Chameleon</li><li>Amiibolink</li></ul></div>
-      <div class="feat hud"><span class="tag">IR</span>
+        <ul><li>Evil portal + deauth</li><li>Beacon spam, target atks</li><li>Raw sniffer, wardriving</li></ul></div>
+      <div class="feat neon"><span class="tag">BLE</span>
+        <h3>Bluetooth LE</h3>
+        <ul><li>Scan &amp; spoof</li><li>iOS / Android / Win spam</li><li>Bad BLE (Ducky)</li></ul></div>
+      <div class="feat neon"><span class="tag">SUB-GHZ</span>
+        <h3>CC1101 <span class="freq">300–928 MHz</span></h3>
+        <ul><li>Scan / copy / replay</li><li>Spectrum + peak-hold <span class="new-badge">NEW</span></li><li>Jammer</li></ul></div>
+      <div class="feat neon"><span class="tag">NFC/RFID</span>
+        <h3>PN532 <span class="freq">13.56 MHz</span></h3>
+        <ul><li>Read / clone / write</li><li>NDEF, Amiibo, Chameleon</li><li>125 kHz tags</li></ul></div>
+      <div class="feat neon"><span class="tag">IR</span>
         <h3>Infrared <span class="freq">38 kHz</span></h3>
-        <ul><li>Jammer</li><li>TV-B-Gone</li><li>Receiver / decode</li><li>NEC · SIRC · RC5/6</li></ul></div>
-      <div class="feat hud"><span class="tag">NRF24 x2</span>
-        <h3>NRF24 <span class="freq">2.4 GHz</span></h3>
-        <ul><li>Jammer</li><li>Mousejack</li><li>2.4G Spectrum</li></ul></div>
-      <div class="feat hud"><span class="tag">SI5351</span>
-        <h3>Signal Gen <span class="freq">8k-160 MHz</span></h3>
-        <ul><li>Frequency gen</li><li>CLK0 / CLK1 / CLK2</li><li>Sweep</li><li>AM band</li></ul></div>
-      <div class="feat hud"><span class="tag">USB HID</span>
-        <h3>Bad USB <span class="freq">native</span></h3>
-        <ul><li>Ducky scripts</li><li>Keystroke injection</li><li>Right USB-C</li></ul></div>
-      <div class="feat hud"><span class="tag">TOOLS</span>
-        <h3>Extras <span class="freq">utility</span></h3>
-        <ul><li>JavaScript interpreter</li><li>WebUI</li><li>SD / LittleFS manager</li><li>QR · iButton</li></ul></div>
+        <ul><li>TV-B-Gone</li><li>RX + custom TX</li><li>NEC / SIRC / RC5 / RC6</li></ul></div>
+      <div class="feat neon"><span class="tag">NRF24</span>
+        <h3>2.4 GHz radios</h3>
+        <ul><li>Jammer</li><li>Dual-radio spectrum <span class="new-badge">NEW</span></li><li>2× faster sweep</li></ul></div>
+      <div class="feat neon"><span class="tag">SI5351</span>
+        <h3>Signal gen <span class="freq">8 kHz–160 MHz</span></h3>
+        <ul><li>Freq set, sweep, AM band</li><li>Live calibration <span class="new-badge">NEW</span></li><li>Favorites <span class="new-badge">NEW</span></li></ul></div>
+      <div class="feat neon"><span class="tag">BAD USB</span>
+        <h3>HID injection</h3>
+        <ul><li>Ducky scripts</li><li>Native USB keyboard</li><li>SD / LittleFS payloads</li></ul></div>
+      <div class="feat neon"><span class="tag">SELF-TEST</span>
+        <h3>Hardware check <span class="new-badge">NEW</span></h3>
+        <ul><li>Probes I²C + SPI buses</li><li>Lists OLED/PN532/Si5351</li><li>microSD + dual NRF24</li></ul></div>
     </div>
   </div>
 </section>
@@ -344,121 +369,61 @@
 <!-- HARDWARE -->
 <section id="hardware">
   <div class="container reveal">
-    <div class="label">// 03 — hardware</div>
+    <div class="kicker">// 03 — hardware</div>
     <h2 class="sec-title">The build</h2>
-    <p class="sec-sub">ESP32-S3 N16R8 core, shared SPI / I²C backbone, dual USB-C.</p>
+    <p class="sec-sub">ESP32-S3 N16R8 — 16 MB flash, 8 MB PSRAM. Dual USB-C: left for UART/programming,
+      right for native USB (Bad USB).</p>
 
     <div class="grid2">
-      <div class="panel hud">
-        <h3>MODULES</h3>
+      <div class="panel neon">
+        <h3>// modules</h3>
         <table>
-          <tr><th>Part</th><th>Function</th></tr>
-          <tr><td><b>CC1101</b></td><td>Sub-GHz 300-928 MHz</td></tr>
+          <tr><th>Part</th><th>Role</th></tr>
+          <tr><td><b>CC1101</b></td><td>Sub-GHz 300–928 MHz</td></tr>
           <tr><td><b>PN532</b></td><td>NFC 13.56 MHz + RFID</td></tr>
-          <tr><td><b>NRF24L01 x2</b></td><td>2.4 GHz · MouseJack · jammer</td></tr>
-          <tr><td><b>Si5351</b></td><td>Signal gen 8 kHz-160 MHz</td></tr>
-          <tr><td><b>MicroSD</b></td><td>File storage</td></tr>
-          <tr><td><b>OLED 1.3" SH1106</b></td><td>Display (SSD1106G)</td></tr>
-          <tr><td><b>VS1838B</b></td><td>IR receiver 38 kHz</td></tr>
-          <tr><td><b>IR LED + 2N2222</b></td><td>IR transmitter</td></tr>
-          <tr><td><b>Passive buzzer</b></td><td>Sound</td></tr>
-          <tr><td><b>6x buttons</b></td><td>Navigation</td></tr>
+          <tr><td><b>NRF24L01 ×2</b></td><td>2.4 GHz, dual spectrum</td></tr>
+          <tr><td><b>Si5351</b></td><td>Clock-gen 8 kHz–160 MHz</td></tr>
+          <tr><td><b>SH1106 OLED</b></td><td>1.3" 128×64 display</td></tr>
+          <tr><td><b>VS1838B + IR LED</b></td><td>IR receive + transmit</td></tr>
+          <tr><td><b>MicroSD</b></td><td>Payload / capture storage</td></tr>
         </table>
       </div>
-      <div class="panel hud">
-        <h3>MAIN BOARD</h3>
-        <p style="color:var(--muted); margin-top:0"><b style="color:var(--fg)">ESP32-S3 N16R8</b> — 16 MB QSPI Flash, 8 MB OPI PSRAM.</p>
-        <ul style="color:var(--muted); padding-left:18px">
-          <li><b style="color:var(--fg)">Left USB-C</b> — UART / programming &amp; browser flashing</li>
-          <li><b style="color:var(--fg)">Right USB-C</b> — native USB (Bad USB / HID)</li>
-        </ul>
-        <p style="color:var(--muted)">Shared SPI (CC1101 + SD + 2x NRF24) and shared I²C
-          (OLED <code>0x3C</code>, PN532 <code>0x24</code>, Si5351 <code>0x60</code>) — unique CS / addresses, no conflicts.</p>
-        <a class="btn btn-ghost" style="margin-top:8px" href="https://github.com/Yoursel71/BruceButBetter#hardware">full_bom →</a>
+      <div class="panel neon">
+        <h3>// shared_buses</h3>
+        <div class="pin">
+<span class="c"># I2C — OLED + PN532 + Si5351</span>
+SDA = <span class="b">IO8</span>   SCL = <span class="b">IO18</span>
+
+<span class="c"># SPI — CC1101 + SD + 2× NRF24</span>
+MOSI=<span class="b">IO11</span>  SCK=<span class="b">IO12</span>  MISO=<span class="b">IO13</span>
+
+<span class="c"># buttons (active-low)</span>
+UP <span class="b">15</span>  DN <span class="b">16</span>  L <span class="b">38</span>  R <span class="b">39</span>  OK <span class="b">40</span>  ESC <span class="b">41</span>
+
+<span class="d"># reserved — do not use</span>
+<span class="d">26-32 flash · 33-37 psram · 19/20 usb</span>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- PINOUT -->
-<section id="pinout">
-  <div class="container reveal">
-    <div class="label">// 04 — wiring</div>
-    <h2 class="sec-title">GPIO map</h2>
-    <p class="sec-sub">Pin assignments for the ESP32-S3 N16R8. The reserved range will brick the board — keep it clear.</p>
-
-    <div class="grid2">
-      <div class="panel hud">
-        <h3>BUSES &amp; MODULES</h3>
-        <div class="pin">
-<span class="c"># I2C (shared)</span>
-IO8  = SDA     IO18 = SCL
-
-<span class="c"># SPI (shared bus)</span>
-IO11 = MOSI    IO12 = SCK    IO13 = MISO
-
-<span class="c"># CS / control (unique)</span>
-CC1101    GDO0=<span class="b">IO9</span>   CS=<span class="b">IO10</span>
-MicroSD   CS=<span class="b">IO14</span>
-NRF24 #1  CE=<span class="b">IO4</span>    CSN=<span class="b">IO5</span>
-NRF24 #2  CE=<span class="b">IO6</span>    CSN=<span class="b">IO7</span>
-IR        RX=<span class="b">IO1</span>    TX=<span class="b">IO2</span>
-Buzzer    <span class="b">IO47</span>
-
-<span class="c"># Buttons (to GND, pull-up)</span>
-UP=15 DOWN=16 LEFT=38 RIGHT=39 OK=40 BACK=41
-        </div>
-      </div>
-      <div class="panel hud danger">
-        <h3>RESERVED — DO NOT USE</h3>
-        <div class="pin">
-GPIO <span class="d">26-32</span>  -> QSPI Flash
-GPIO <span class="d">33-37</span>  -> OPI PSRAM (forbidden, N16R8)
-GPIO <span class="d">19-20</span>  -> Native USB D+/D- (Bad USB)
-GPIO <span class="d">45-46</span>  -> Strapping pins
-GPIO <span class="d">43-44</span>  -> UART0 TX/RX (debug)
-        </div>
-        <p style="color:var(--muted); font-size:.88rem; margin-bottom:0; font-family:var(--mono)">
-          driving flash/PSRAM pins locks the chip permanently.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- MANUAL -->
+<!-- MANUAL FLASH -->
 <section id="manual">
-  <div class="container reveal">
-    <div class="label">// 05 — fallback</div>
-    <h2 class="sec-title">Manual flash (esptool)</h2>
-    <p class="sec-sub">Browser method failing? Pull the bins from
-      <a href="https://github.com/Yoursel71/BruceButBetter/releases">Releases</a> and flash by hand.</p>
-
-    <div class="grid2">
-      <div class="panel hud">
-        <h3>MERGED (ONE FILE)</h3>
-        <div class="code"><button class="copy" onclick="cp(this)">copy</button>esptool.py --chip esp32s3 --port COMx \
-  write_flash 0x0 Bruce-esp32-s3-N16R8.bin</div>
-        <p style="color:var(--muted); font-size:.86rem; font-family:var(--mono)">linux/mac: /dev/ttyACM0 or /dev/ttyUSB0 instead of COMx</p>
-      </div>
-      <div class="panel hud">
-        <h3>COMPONENT OFFSETS</h3>
-        <table>
-          <tr><th>File</th><th>Offset</th></tr>
-          <tr><td><code>Bruce-esp32-s3-N16R8.bin</code></td><td><code>0x0</code></td></tr>
-          <tr><td><code>bootloader.bin</code></td><td><code>0x0</code></td></tr>
-          <tr><td><code>partitions.bin</code></td><td><code>0x8000</code></td></tr>
-          <tr><td><code>boot_app0.bin</code></td><td><code>0xe000</code></td></tr>
-          <tr><td><code>firmware.bin</code></td><td><code>0x10000</code></td></tr>
-        </table>
-      </div>
-    </div>
+  <div class="container reveal" style="max-width:840px">
+    <div class="kicker">// 04 — manual flash</div>
+    <h2 class="sec-title">Prefer esptool?</h2>
+    <p class="sec-sub">Grab the merged image for your board from the releases page and write it at <code>0x0</code>.</p>
+    <div class="code"><button class="copy" onclick="cp(this)">copy</button>esptool.py --chip esp32s3 --port COMx write_flash 0x0 Bruce-esp32-s3-devkitc-1-psram.bin</div>
+    <p style="color:var(--muted); margin-top:18px; font-family:var(--mono); font-size:.86rem">
+      The browser flasher already does the merge + offsets for you — this is only for scripted/CI installs.</p>
   </div>
 </section>
 
 <!-- FAQ -->
 <section id="faq">
-  <div class="container reveal" style="max-width:800px">
-    <div class="label">// 06 — help</div>
+  <div class="container reveal" style="max-width:820px">
+    <div class="kicker">// 05 — help</div>
     <h2 class="sec-title">FAQ</h2>
     <p class="sec-sub">Before you flash.</p>
 
@@ -467,9 +432,9 @@ GPIO <span class="d">43-44</span>  -> UART0 TX/RX (debug)
     <details><summary>Flashing won't start / no port appears</summary>
       <p>Hold BOOT while plugging in (or BOOT+RESET) to force download mode. Install the CH34x or native-USB serial driver, and use the left USB-C port.</p></details>
     <details><summary>Do I need every module populated?</summary>
-      <p>No. Modules are probed at runtime — flash the single binary regardless of hardware. A missing chip shows a "not found" message instead of crashing.</p></details>
-    <details><summary>Which USB-C port for what?</summary>
-      <p>Left = UART / programming / browser flashing. Right = native USB for Bad USB / HID.</p></details>
+      <p>No. Modules are probed at runtime — flash the single binary regardless of hardware. A missing chip shows a "not found" message instead of crashing. Run Hardware Self-Test to see what's detected.</p></details>
+    <details><summary>What's different from upstream Bruce?</summary>
+      <p>Same firmware base, plus genuinely-new bits: Hardware Self-Test (I²C+SPI probe), Si5351 live calibration + favorites, dual-NRF24 spectrum, CC1101 peak-hold spectrum, and a version-aware multi-board browser flasher.</p></details>
     <details><summary>Is this legal?</summary>
       <p>For authorized security testing and education only. Jammers and deauth against gear you do not own are illegal in most jurisdictions. You assume all responsibility. AGPL licensed.</p></details>
   </div>
@@ -478,11 +443,11 @@ GPIO <span class="d">43-44</span>  -> UART0 TX/RX (debug)
 <!-- CTA -->
 <section style="text-align:center">
   <div class="container reveal">
-    <h2 class="sec-title" style="font-size:2.1rem">Build it. Flash it. Own the spectrum.</h2>
+    <h2 class="sec-title" style="font-size:2.2rem">Build it. Flash it. Own the spectrum.</h2>
     <p class="sec-sub" style="margin:10px auto 28px; font-family:var(--mono)">Open source · contributor-friendly · AGPL</p>
     <div class="cta-row">
       <a class="btn btn-primary" href="#flash">&gt; flash_now</a>
-      <a class="btn btn-ghost" href="https://github.com/Yoursel71/BruceButBetter/blob/master/CONTRIBUTING.md">contribute</a>
+      <a class="btn btn-ghost" href="https://github.com/Yoursel71/BruceButBetter">contribute</a>
     </div>
   </div>
 </section>
@@ -528,13 +493,13 @@ GPIO <span class="d">43-44</span>  -> UART0 TX/RX (debug)
   const tline="> sub-ghz · nfc/rfid · ir · wifi/ble · nrf24 · si5351";
   const el=document.getElementById('typed'); let i=0;
   (function type(){ if(i<=tline.length){ el.textContent=tline.slice(0,i++); setTimeout(type, 38);} })();
-  // reveal
+  // reveal on scroll
   const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
   document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
-  // ---- multi-board flasher: pick a firmware version + board, swap esp-web-tools manifest ----
-  // Version + board lists come from versions.json in the (same-origin) bins repo, so adding a
-  // new release = drop a vX.Y.Z/ folder + a line in versions.json — no edit to this page.
+  // ---- multi-board flasher: version + board pickers drive esp-web-tools ----
+  // Lists come from versions.json in the (same-origin) bins repo, so a new
+  // release = drop a vX.Y.Z/ folder + a line in versions.json, no edit here.
   const BBB_BINS="https://yoursel71.github.io/BruceButBetter-bins";
   (function(){
     const vsel=document.getElementById('verSelect');
@@ -544,7 +509,6 @@ GPIO <span class="d">43-44</span>  -> UART0 TX/RX (debug)
     const DEFAULT_ENV="esp32-s3-devkitc-1-psram";
     const by=(a,b)=>a.env.toLowerCase()<b.env.toLowerCase()?-1:1;
     let DATA=null, last=null;
-
     const curVer=()=>DATA.versions.find(v=>v.id===vsel.value)||DATA.versions[0];
 
     function buildVersions(){
