@@ -18,6 +18,7 @@
 #include "menu_items/RFIDMenu.h"
 #include "menu_items/RFMenu.h"
 #include "menu_items/ScriptsMenu.h"
+#include "menu_items/SelfTestMenu.h"
 #include "menu_items/Si5351Menu.h"
 #include "menu_items/WifiMenu.h"
 class MainMenu {
@@ -35,6 +36,7 @@ public:
     RFIDMenu rfidMenu;
     RFMenu rfMenu;
     ScriptsMenu scriptsMenu;
+    SelfTestMenu selfTestMenu;
     WifiMenu wifiMenu;
 #if !defined(LITE_VERSION)
     LoRaMenu loraMenu;

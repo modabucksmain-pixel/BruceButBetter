@@ -31,6 +31,7 @@ MainMenu::MainMenu() {
 #if !defined(LITE_VERSION) && !defined(DISABLE_INTERPRETER)
         &scriptsMenu,
 #endif
+        &selfTestMenu,
         &clockMenu,
         &configMenu,
     };
