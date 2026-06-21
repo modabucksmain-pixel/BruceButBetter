@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "author": "BruceButBetter",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "board-esp32-s3-devkitc-1", "id": "esp", "top": 0, "left": 0, "attrs": {} },
+    {
+      "type": "board-ssd1306",
+      "id": "oled",
+      "top": -120,
+      "left": 200,
+      "attrs": { "i2cAddress": "0x3c" }
+    },
+    { "type": "wokwi-pushbutton", "id": "btnUp",    "top": 40,  "left": 320, "attrs": { "color": "green", "label": "UP" } },
+    { "type": "wokwi-pushbutton", "id": "btnDown",  "top": 120, "left": 320, "attrs": { "color": "green", "label": "DOWN" } },
+    { "type": "wokwi-pushbutton", "id": "btnLeft",  "top": 80,  "left": 240, "attrs": { "color": "blue",  "label": "LEFT" } },
+    { "type": "wokwi-pushbutton", "id": "btnRight", "top": 80,  "left": 400, "attrs": { "color": "blue",  "label": "RIGHT" } },
+    { "type": "wokwi-pushbutton", "id": "btnOk",    "top": 200, "left": 320, "attrs": { "color": "red",   "label": "OK" } },
+    { "type": "wokwi-pushbutton", "id": "btnBack",  "top": 200, "left": 420, "attrs": { "color": "black", "label": "BACK" } }
+  ],
+  "connections": [
+    [ "esp:8",  "oled:SDA", "green", [] ],
+    [ "esp:18", "oled:SCL", "green", [] ],
+    [ "esp:3V3", "oled:VCC", "red", [] ],
+    [ "esp:GND.1", "oled:GND", "black", [] ],
+
+    [ "btnUp:2.l",    "esp:15", "green", [] ],
+    [ "btnUp:1.l",    "esp:GND.2", "black", [] ],
+    [ "btnDown:2.l",  "esp:16", "green", [] ],
+    [ "btnDown:1.l",  "esp:GND.2", "black", [] ],
+    [ "btnLeft:2.l",  "esp:38", "blue", [] ],
+    [ "btnLeft:1.l",  "esp:GND.2", "black", [] ],
+    [ "btnRight:2.l", "esp:39", "blue", [] ],
+    [ "btnRight:1.l", "esp:GND.2", "black", [] ],
+    [ "btnOk:2.l",    "esp:40", "red", [] ],
+    [ "btnOk:1.l",    "esp:GND.2", "black", [] ],
+    [ "btnBack:2.l",  "esp:41", "black", [] ],
+    [ "btnBack:1.l",  "esp:GND.2", "black", [] ]
+  ],
+  "dependencies": {}
+}
