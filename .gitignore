@@ -27,3 +27,9 @@ lib/mquickjs_headers/mqjs_stdlib_generator.exe
 /.monitor/
 /build_*.sh
 /rebuild_failed.sh
+
+# editor/merge leftovers
+*.bak
+*.orig
+*.tmp
+*.rej
