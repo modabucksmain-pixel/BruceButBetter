@@ -527,3 +527,69 @@ svg > path {
     transform: rotate(360deg);
   }
 }
+
+/* ------------------------------------------------------------------ *
+ * Responsive: on narrow screens several elements have fixed pixel
+ * widths (inputs 300px, upload rows 350px, drop overlay 300px, header
+ * buttons 100px) that overflow / overlap. Make them fluid below 600px.
+ * Additive only — desktop layout is untouched.
+ * ------------------------------------------------------------------ */
+@media (max-width: 600px) {
+  body {
+    padding: 6px;
+  }
+  /* Header: let the title + action buttons wrap instead of overflowing */
+  .container .header {
+    flex-wrap: wrap;
+  }
+  .container .header .title {
+    flex: 1 1 100%;
+    border-bottom: 1px solid var(--color);
+  }
+  .left-part,
+  .right-part {
+    text-align: center;
+  }
+  .container .header button {
+    width: auto;
+    min-width: 90px;
+  }
+  /* Free-space blocks: stack vertically so they don't squeeze */
+  .container .free-space {
+    flex-direction: column;
+  }
+  .container .free-space .block-space {
+    width: 100%;
+    border-right: 0;
+    border-bottom: 1px solid var(--color);
+  }
+  .container .free-space .block-space:last-child {
+    border-bottom: 0;
+  }
+  /* Dialog inputs: drop the 300px min-width that overflows phones */
+  .dialog .dialog-body input {
+    min-width: 0;
+  }
+  /* Upload rows + full-screen overlays: fluid instead of fixed px */
+  .dialog.upload .upload-loading {
+    width: 100%;
+  }
+  .upload-area::before {
+    width: auto;
+    height: auto;
+    max-width: 90vw;
+    font-size: 18px;
+    padding: 16px;
+  }
+  .loading-area .text {
+    min-width: 0;
+    max-width: 90vw;
+  }
+  /* Keep the file name readable by trimming the action/size columns */
+  .container .content .table .col-action {
+    width: 96px;
+  }
+  .container .content .table .col-size {
+    width: 64px;
+  }
+}
