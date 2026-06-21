@@ -155,6 +155,8 @@ void rf_CC1101_rssi() {
     std::vector<int> signal(graph_size, -95);
     const size_t freq_count = sizeof(subghz_frequency_list) / sizeof(float);
     std::vector<int> bar_size(freq_count, 0);
+    std::vector<int> peak_hold(freq_count, 0);    // highest bar ever seen per freq
+    std::vector<int> last_rssi(freq_count, -95);  // latest dBm per freq (for the readout)
     int max_bar_size = tftHeight - 20 /*bottom margin*/ - 20 /*top margin*/;
     bool redraw = true;
     const int min_value = map(-70, -95, -20, 0, max_bar_size);
@@ -200,6 +202,8 @@ void rf_CC1101_rssi() {
                     tft.drawFastVLine(space * i, tftHeight - 20, 5, bruceConfig.priColor);
                 }
                 std::fill(bar_size.begin(), bar_size.end(), 0);
+                std::fill(peak_hold.begin(), peak_hold.end(), 0);
+                std::fill(last_rssi.begin(), last_rssi.end(), -95);
             }
         }
 
@@ -240,21 +244,27 @@ void rf_CC1101_rssi() {
                 vTaskDelay(pdMS_TO_TICKS(5));
                 int rssi = ELECHOUSE_cc1101.getRssi();
                 tft.drawPixel(0, 0, 0); // To make sure CC1101 shared with TFT works properly
+                last_rssi[i] = rssi;
                 int size = map(rssi, -95, -20, 0, max_bar_size);
                 if (size > bar_size[i]) bar_size[i] = size;
                 else bar_size[i] = bar_size[i] - (bar_size[i] - size) / 2; // slow down decrease
+                if (bar_size[i] > peak_hold[i]) peak_hold[i] = bar_size[i]; // peak-hold envelope
                 tft.fillRect(
                     i * space, tftHeight - 20 - bar_size[i], space - 2, bar_size[i], bruceConfig.priColor
                 );
                 tft.fillRect(i * space, 20, space, max_bar_size - bar_size[i], bruceConfig.bgColor);
+                // peak-hold cap, redrawn each sweep above the live bar
+                tft.drawFastHLine(i * space, tftHeight - 20 - peak_hold[i], space - 2, bruceConfig.secColor);
                 if (bar_size[i] > bar_size[max_idx] && bar_size[i] > min_value) max_idx = i;
             }
             if (bar_size[max_idx] > min_value) {
                 char buf[7];
                 float var = subghz_frequency_list[range_limits[bruceConfigPins.rfScanRange][0] + max_idx];
                 snprintf(buf, sizeof(buf), "%.2f", var);
-                tft.drawCentreString("Max=      ", tftWidth / 2, tftHeight - 10);
-                tft.drawCentreString("Max=" + String(buf), tftWidth / 2, tftHeight - 10);
+                tft.drawCentreString("                  ", tftWidth / 2, tftHeight - 10);
+                tft.drawCentreString(
+                    String(buf) + " " + String(last_rssi[max_idx]) + "dBm", tftWidth / 2, tftHeight - 10
+                );
             }
         }
         if (check(EscPress)) { break; }
