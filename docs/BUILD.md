@@ -146,6 +146,9 @@ Grab `Bruce-esp32-s3-devkitc-1-psram.bin` from the
 ## First boot / verify
 
 - Screen shows the BruceButBetter boot logo → the menu.
+- **Run Hardware Self-Test first** (top-level menu): it probes the I²C and SPI buses and lists what
+  answered — OLED, PN532, Si5351, microSD and both NRF24 radios with `[OK]`/`[--]`. The fastest way to
+  confirm your wiring/soldering before touching the feature menus.
 - Open each module's menu; a populated chip is detected, a missing one says "not found" (expected).
 - microSD: format **FAT32**; firmware auto-creates its folders on first run.
 - Bad USB / HID uses the **right** USB-C (native USB); programming/serial uses the **left**.
